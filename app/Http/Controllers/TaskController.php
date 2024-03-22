@@ -14,7 +14,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-        // $tasks = Task::all();
+        //$tasks = Task::all();
         $tasks = Task::where('user_id', auth()->user()->id)->get();
 
         return response()->json($tasks);
@@ -25,7 +25,15 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'title' =>'required|max:255',
+            'description' =>'required|max:255',
+            'published_at' => 'date',
+            'user_id' => 'exists:users,id',
+        ]);
+
+        $task = Task::create($request->only(['title', 'description', 'published_at', 'user_id']));
+        return response()->json($task);
     }
 
     /**
@@ -43,7 +51,8 @@ class TaskController extends Controller
      */
     public function update(Request $request, Task $task)
     {
-        //
+        $task->update($request->all());
+        return response()->json($task);
     }
 
     /**
@@ -51,6 +60,7 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
-        //
+        $task->delete();
+        return response()->noContent();
     }
 }

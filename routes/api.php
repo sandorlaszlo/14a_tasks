@@ -25,5 +25,6 @@ Route::post('login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('tasks', TaskController::class);
+    // Route::patch('tasks/{task}', [TaskController::class, 'update']);
     Route::post('logout', [AuthController::class, 'logout']);
 });
